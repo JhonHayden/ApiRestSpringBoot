@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--para agregar dinamismo a la pagina xmlns:th="http://www.thymeleaf.org"-->
+<html xmlns:th="http://www.thymeleaf.org"><!--me permite informacion dinamica-->
+    <head>
+        <title>Inicio</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Inicio</h1>
+        <a th:href='@{/agregar}'>Crear Empleado</a>
+        <br/>
+        <div th:if="${empleados != null and !empleados.empty}">
+
+            <table border="1">
+                <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Tipo de Documento</th>
+                    <th>Número de Documento</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Fecha de Vinculación a la Compañía</th>
+                    <th>Cargo</th>
+                    <th>Salario</th>
+                    <th>Tiempo Vinculación compañía</th>
+                    <th>Edad</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+                <tr th:each="empleado : ${empleados}">
+                    <td th:text="${empleado.nombres}">Mostrar nombres</td>
+                    <td th:text="${empleado.apellidos}">Mostrar apellidos</td>
+                    <td th:text="${empleado.tipoDocumento}">Mostrar tipo de documento</td>
+                    <td th:text="${empleado.numeroDocumento}">Mostrar numero de documento</td>
+                    <td th:text="${empleado.fechaNacimiento}">Mostrar fecha de nacimiento</td>
+                    <td th:text="${empleado.fechaVinculacion}">Mostrar fecha de vinculacion a la compañia</td>
+                    <td th:text="${empleado.cargo}">Mostrar cargo</td>
+                    <td th:text="${empleado.salario}">Mostrar salario</td>
+                    <td th:text="${empleado.tiempoVinculacion}">Mostrar tiempoVinculacion</td>
+                    <td th:text="${empleado.edad}">Mostrar edad</td>
+                    <td><a th:href="@{/editar/}+${empleado.idempleado}" th:text="Editar"/> </td>
+                    <td><a th:href="@{/eliminar(idempleado=${empleado.idempleado})}" th:text="Eliminar"/> </td>
+                </tr>
+            </table>
+        </div>
+        <div th:if="${empleados ==null or empleados.empty}">
+            La lista de empleados esta vacia
+        </div>
+    </body>
+</html>

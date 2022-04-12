@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns="http://www.w3.org/1999/xhtml"><!--me permite informacion dinamica-->
+    <!--xmlns='http://www.w3.org/1999/xhtml' me permite eliminar warning-->
+    <head>
+        <title>Datos del empleado</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <h1>Datos del empleado</h1>
+        <a th:href="@{/}">Regresar</a>
+        <br/>
+        <form th:action="@{/guardar}" method="post" th:object="${empleado}">
+            <input type="hidden" name="idempleado" th:field="*{idempleado}"/>
+            <label for="nombres">Nombres</label>
+            <input type="text" name="nombres" th:field="*{nombres}" 
+                   required="required" pattern="[A-Za-z ]{3,30}"/>
+            <span th:if="${#fields.hasErrors('nombres')}" th:errors="*{nombres}">Error Nombre</span>
+            <br/>
+            <label for="apellidos">Apellidos</label>
+            <input type="text" name="apellidos" th:field="*{apellidos}" 
+                   required="required" pattern="[A-Za-z ]{3,30}"/>
+            <span th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}">Error Apellido</span>
+
+            <br/>
+            <label for="tipoDocumento">Tipo de Documento</label>
+            <select name="tipoDocumento" th:field="*{tipoDocumento}" required="required" >
+                <option value="Cedula de ciudadania">Cedula de ciudadania</option>
+                <option value="Cedula de extranjeria">Cedula de extranjeria</option>
+                <option value="Pasaporte">Pasaporte</option>
+            </select>
+            <br/>
+            <label for="numeroDocumento">Numero Documento</label>
+            <input type="text" name="numeroDocumento" th:field="*{numeroDocumento}" 
+                   required="required" pattern="[0-9]{8,15}"/>
+            <span th:if="${#fields.hasErrors('numeroDocumento')}" th:errors="*{numeroDocumento}">Error Numero Documento</span>
+            <br/>
+            <label for="fechaNacimiento">Fecha Nacimiento</label>
+            <input type="date" name="fechaNacimiento" th:field="*{fechaNacimiento}" 
+                   required="required" min="1922-01-01" max="2003-01-01"/>
+            <span th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}">Error Fecha Nacimiento</span>
+            <br/>
+            <label for="fechaVinculacion">Fecha de Vinculacion</label>
+            <input type="date" name="fechaVinculacion" th:field="*{fechaVinculacion}" 
+                   required="required"/>
+            <span th:if="${#fields.hasErrors('fechaVinculacion')}" th:errors="*{fechaVinculacion}">Error Fecha Vinculacion</span>
+            <br/>
+            <label for="cargo">Cargo</label>
+            <input type="text" name="cargo" th:field="*{cargo}" 
+                   required="required" pattern="[A-Za-z ]{8,30}"  minlength="8" maxlength="30"/>
+            <span th:if="${#fields.hasErrors('cargo')}" th:errors="*{cargo}">Error Cargo</span>
+            <br/>
+            <label for="salario">Salario</label>
+            <input type="number" name="salario" th:field="*{salario}" 
+                   required="required"   minlength="4" maxlength="10"
+                   pattern="[0-9]{4,10}"/>
+            <span th:if="${#fields.hasErrors('salario')}" th:errors="*{salario}">Error Salario</span>
+            <br/>
+            <input type="submit" name="guardar" value="Guardar"/>
+        </form>
+    </body>
+</html>
