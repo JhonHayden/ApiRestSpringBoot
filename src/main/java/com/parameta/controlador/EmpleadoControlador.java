@@ -2,10 +2,11 @@ package com.parameta.controlador;
 
 import com.parameta.entidades.Empleado;
 import com.parameta.servicio.EmpleadoService;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Calendar;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-//@RestController
-//@RequestMapping("/api/empleado")
 @Slf4j
 public class EmpleadoControlador {
-// 
 
     @Autowired
     private EmpleadoService empleadoService;
@@ -35,25 +33,20 @@ public class EmpleadoControlador {
     }
 
     @GetMapping("/agregar")// path de el html 
-    public String agregar(Empleado empleado) {
+    public String agregar(Empleado empleado, Model model) {
+
+        model.addAttribute("fechaActual", fechaActual());
+        model.addAttribute("mayorEdad", mayorEdad());
         return "modificar";
     }
 
     @PostMapping("/guardar")
-    public String guardar(@Valid Empleado empleado, Errors errores) {
-//        Empleado empleadoListo = empleado;
-
-//        if (errores.hasErrors()) {
-//            return "modificar";
-//        }
-        //convierto a string el sql.Date de FechaNacimiento
+    public String guardar(@Valid Empleado empleado, Errors errores, Model model) {
         String fechaNacim = empleado.getFechaNacimiento().toString();
 
         //convierto a string el sql.Date de FechaNacimiento
         String fechaVincul = empleado.getFechaVinculacion().toString();
 
-        System.out.println("fechaNacimiento:");
-        System.out.println(fechaNacim);
         //calcular edad Empleado
         DateTimeFormatter fmtEdad = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaNac = LocalDate.parse(fechaNacim, fmtEdad);
@@ -65,26 +58,25 @@ public class EmpleadoControlador {
         LocalDate fechaVinculacion = LocalDate.parse(fechaVincul, fmtTiempoVinculacion);
 
         Period periodoTiempoVinculacion = Period.between(fechaVinculacion, ahora);
-//        System.out.printf("Tu edad es: %s años, %s meses y %s días",
-//                periodo.getYears(), periodo.getMonths(), periodo.getDays());
 
-        Integer edadAños = periodoEdad.getYears();
+        Integer yearsedad = periodoEdad.getYears();
         Integer edadMeses = periodoEdad.getMonths();
         Integer edadDias = periodoEdad.getDays();
 
-        Integer añosVinculacion = periodoTiempoVinculacion.getYears();
+        Integer yearsVinculacion = periodoTiempoVinculacion.getYears();
         Integer mesesVinculacion = periodoTiempoVinculacion.getMonths();
+        System.out.println(yearsedad);
 
-        if (edadAños > 18) {
-            System.out.println("si entre");
-            System.out.println(empleado);
-            empleado.setEdad(edadAños.toString() + "/" + edadMeses.toString() + "/" + edadDias.toString());
-            empleado.setTiempoVinculacion(añosVinculacion.toString() + "/" + mesesVinculacion.toString());
+        if (yearsedad > 17) {
 
-            System.out.println(empleado);
+            empleado.setEdad(yearsedad.toString() + "/" + edadMeses.toString() + "/" + edadDias.toString());
+            empleado.setTiempoVinculacion(yearsVinculacion.toString() + "/" + mesesVinculacion.toString());
+
             empleadoService.guardar(empleado);
             return "redirect:/"; // me retorna a la pagina de inicio
         } else {
+            var mesaje = "menor de edad";
+            model.addAttribute("mesaje", mesaje);
             return "modificar";
         }
     }
@@ -92,6 +84,8 @@ public class EmpleadoControlador {
     @GetMapping("/editar/{idempleado}")// path de el html 
     public String editar(Empleado empleado, Model model) {
         empleado = empleadoService.encontrarEmpleado(empleado);
+        model.addAttribute("fechaActual", fechaActual());
+        model.addAttribute("mayorEdad", mayorEdad());
         model.addAttribute("empleado", empleado);// me permite compartir con la vista el objeto empleado encontrado
         return "modificar";
     }
@@ -101,6 +95,33 @@ public class EmpleadoControlador {
         empleadoService.eliminar(empleado);
         model.addAttribute("empleado", empleado);// me permite compartir con la vista el objeto empleado encontrado
         return "redirect:/";
+    }
+
+    public static String fechaActual() {
+        long miliseconds = System.currentTimeMillis();
+        Date date = new Date(miliseconds);
+        String fechaActual = date.toString();
+
+        return fechaActual;
+    }
+
+    public static String mayorEdad() {
+
+        String actual = "";
+
+        for (int i = 0; i < 4; i++) {
+
+            actual = actual + fechaActual().charAt(i);
+        }
+
+        Integer actualINTEGER = Integer.parseInt(actual);
+
+        Integer mayorEdadINTEGER = actualINTEGER - 19;
+        String mayorEdadSTRING = mayorEdadINTEGER.toString();
+        System.out.println("añoMayorEdad:");
+        System.out.println(mayorEdadSTRING);
+
+        return mayorEdadSTRING;
     }
 
 }

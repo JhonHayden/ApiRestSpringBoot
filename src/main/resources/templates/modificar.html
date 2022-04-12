@@ -37,12 +37,12 @@
             <br/>
             <label for="fechaNacimiento">Fecha Nacimiento</label>
             <input type="date" name="fechaNacimiento" th:field="*{fechaNacimiento}" 
-                   required="required" min="1922-01-01" max="2003-01-01"/>
+                   required="required" min="1922-01-01" th:max="${mayorEdad}+'-12-01'"/>
             <span th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}">Error Fecha Nacimiento</span>
             <br/>
             <label for="fechaVinculacion">Fecha de Vinculacion</label>
             <input type="date" name="fechaVinculacion" th:field="*{fechaVinculacion}" 
-                   required="required"/>
+                   required="required" th:max="${fechaActual}"/>
             <span th:if="${#fields.hasErrors('fechaVinculacion')}" th:errors="*{fechaVinculacion}">Error Fecha Vinculacion</span>
             <br/>
             <label for="cargo">Cargo</label>
@@ -58,5 +58,6 @@
             <br/>
             <input type="submit" name="guardar" value="Guardar"/>
         </form>
+        <span th:text="${mensaje}"></span>
     </body>
 </html>
