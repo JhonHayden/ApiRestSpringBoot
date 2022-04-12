@@ -69,8 +69,8 @@ public class EmpleadoControlador {
 
         if (yearsedad > 17) {
 
-            empleado.setEdad(yearsedad.toString() + "/" + edadMeses.toString() + "/" + edadDias.toString());
-            empleado.setTiempoVinculacion(yearsVinculacion.toString() + "/" + mesesVinculacion.toString());
+            empleado.setEdad(yearsedad.toString() + "-" + edadMeses.toString() + "-" + edadDias.toString());
+            empleado.setTiempoVinculacion(yearsVinculacion.toString() + "-" + mesesVinculacion.toString());
 
             empleadoService.guardar(empleado);
             return "redirect:/"; // me retorna a la pagina de inicio
